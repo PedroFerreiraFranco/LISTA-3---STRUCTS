@@ -8,7 +8,7 @@ typedef struct{
 	int integrantes;
 	int ranking;
 }tbanda;
-int qtd=0; //controlar posição dentro do vetor
+int qtd=0; //controlar posiÃ§Ã£o dentro do vetor
 
 void addBanda(tbanda b[]){
 	printf("Nome da banda: ");
