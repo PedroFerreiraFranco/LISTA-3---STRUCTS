@@ -63,8 +63,11 @@ void listaRanking(tbanda b[], int busca){
 //-----------------------------
 void filtroGenero(tbanda b[], char generoBusca[40]){
 	int i;
+	char generoAux[40];
 	for(i=0;i<qtd;i++){
-		if(strcmp(generoBusca,b[i].genero)==0){
+		strcpy(generoAux,b[i].genero);
+		strupr(generoAux);
+		if(strcmp(generoBusca,generoAux)==0){
 			printf("\n** Banda %d **\n",i+1);
 			printf("Nome: %s\n",b[i].nome);
 			printf("Genero da banda: %s\n",b[i].genero);
@@ -121,7 +124,9 @@ int main(){
 			
 			case 4:
 				printf("\nNome do genereo para busca: ");
-				scanf("%s",&genero);
+				fflush(stdin);
+				gets(genero);
+				strupr(genero);
 				filtroGenero(bandas,genero);	
 			
 			case 0:
@@ -135,4 +140,3 @@ int main(){
 		system("cls");//limpa tela
 	}while(opcao!=0);
 }
-
