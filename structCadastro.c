@@ -23,7 +23,7 @@ void addBanda(tbanda b[]){
 	scanf("%d",&b[qtd].ranking);
 	qtd++;
 }
-
+//-----------------------------
 void listaBandas(tbanda b[]){
 	int i;
 	for(i=0;i<qtd;i++){
@@ -34,7 +34,7 @@ void listaBandas(tbanda b[]){
 		printf("Ranking da banda: %d\n",b[i].ranking);
 	}
 }
-
+//-----------------------------
 int menu(){
 	int opcao;
 	printf("***SISTEMA DE CADRASTRO ROCK4YOU***\n");
@@ -42,6 +42,8 @@ int menu(){
 	printf("2- Listar\n");
 	printf("3- Busca\n");
 	printf("4- Filtrar Genero\n");
+	printf("5- Procurar nome da banda\n");
+	printf("6- Excluir\n");
 	printf("0- Sair\n");
 	printf("\nEntre com sua escolha: ");
 	scanf("%d",&opcao);
@@ -77,6 +79,42 @@ void filtroGenero(tbanda b[], char generoBusca[40]){
 	}
 }
 //-----------------------------
+int procurarBanda(tbanda b[], char nomeBanda[40]){
+	int i;
+	char nomeAux[40];
+	for(i=0;i<qtd;i++){
+		strcpy(nomeAux,b[i].nome);//copiando dados do vetor para a variavel
+		strupr(nomeAux);//uppercase
+		if(strcmp(nomeBanda,nomeAux)==0){
+			printf("\n** Banda %d **\n",i+1);
+			printf("Genero da banda: %s\n",b[i].genero);
+			printf("Quantidade de integrantes: %d\n",b[i].integrantes);
+			printf("Ranking da banda: %d\n",b[i].ranking);
+				return i;//encontrou e retornou o indice
+		}
+	}
+	return -1;//nao encontrou 
+}
+//-----------------------------
+void removeBanda(tbanda b[], char nomeBanda[40]){
+	int posicao,resp;
+	
+	posicao = procurarBanda(b,nomeBanda);
+	if(posicao == -1){
+		printf("Banda nao encontrada\n");
+	return;
+	}//fim if
+	printf("\nDeseja mesmo deletar a banda?\n[1-sim][2-nao]\n\nOp escolhida:");
+	scanf("%d",&resp);
+	if(resp==1){
+		b[posicao] = b[qtd-1];//sobrepondo a ultima banda
+		qtd--;
+	printf("Banda removida com sucesso");
+}
+	else 
+		printf("Operacao cancelada\n");
+}
+//-----------------------------
 void salvaArquivo(tbanda bandas[]){
 	FILE *arq;
 	int i=0;
@@ -98,11 +136,11 @@ void carregaArquivo(tbanda bandas[]){
 	 printf("Dados carregados com sucesso !\n");
 	fclose(arq);
 }
-
+//-----------------------------
 int main(){
 	tbanda bandas[100];
 	int opcao, busca;
-	char genero[40];
+	char genero[40],nome[40];
 	carregaArquivo(bandas);
 	
 	do{
@@ -127,7 +165,27 @@ int main(){
 				fflush(stdin);
 				gets(genero);
 				strupr(genero);
-				filtroGenero(bandas,genero);	
+				filtroGenero(bandas,genero);
+			break;	
+				
+			case 5:
+				printf("\nNome da banda: ");
+				fflush(stdin);
+				gets(nome);
+				strupr(nome);
+				if(procurarBanda(bandas,nome)==-1)
+					printf("\nBanda nao encontrada :(\n");
+				else
+					printf("\nBanda encontrada :)\n");
+			break;
+			
+			case 6:
+				printf("\nNome da banda para: ");
+				fflush(stdin);
+				gets(nome);
+				strupr(nome);
+				removeBanda(bandas,nome);
+			break;
 			
 			case 0:
 				printf("Saindo...\n");
